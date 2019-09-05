@@ -1,4 +1,4 @@
-# What is diff between StatelessWidget and StatefulWidget
+# StatelessWidget vs StatefulWidget
 
 ## - StatelessWidget
 - 처음 로드 될 때 딱 한번 그려지는 위젯
@@ -14,3 +14,4 @@
 
 
 # Custom Parameter
+- 생성사를 만들시 () 안에 {}를 넣어준다면 optional 하게 만들어 줄 수 있다.
