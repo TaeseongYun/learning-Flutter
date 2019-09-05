@@ -26,3 +26,18 @@
   )
   ```
 - Dart 언어 에서는 private, protected, internal같은 접근 제한자가 없다, `_(underLine)`를 사용한 변수나 함수는 `private`가 된다.
+
+# Function Keyword
+- 이 키워드는 함수에서 매개변수를 함수를 사용하거나 포인터를 사용했을 시 이용하는 키워드이다. Kotlin개발 했던 나에겐 이것이 Function 키워드 라고 생각하면 쉬울 것이다.
+
+  ```Kotlin
+  fun add(addFunc: (a: Int, b: Int) -> Int): Int {
+      return addFunc(10, 20)
+  }
+
+      val result = add{ x , y -> x + y }
+      print("${result}")
+    ```
+
+
+  
