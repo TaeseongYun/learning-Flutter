@@ -13,8 +13,20 @@ class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
 
   var questions = [
-    'What\'s your favorite animals?',
-    'What\'s your favorite foods?'
+
+    // map's all of them each others
+    {
+      'questionText': 'What\'s your favorite color?',
+      'answer': ['Green', 'Yellow', 'Red', 'Blue']
+    },
+    {
+      'questionText': 'What\'s your favorite animal?',
+      'answer': ['Rabbit', 'Snake', 'Lion', 'Elephant']
+    },
+    {
+      'questionText': 'Who\'s your favorite instructor?',
+      'answer': ['Max', 'Max', 'Max', 'Max']
+    }
   ];
 
   void answerQuestions() {

@@ -31,13 +31,41 @@
 - 이 키워드는 함수에서 매개변수를 함수를 사용하거나 포인터를 사용했을 시 이용하는 키워드이다. Kotlin개발 했던 나에겐 이것이 Function 키워드 라고 생각하면 쉬울 것이다.
 
   ```Kotlin
-  fun add(addFunc: (a: Int, b: Int) -> Int): Int {
-      return addFunc(10, 20)
-  }
+    fun add( value1: Int, value2: Int, 
+        addFunc: (a: Int, b: Int) -> Int): Int 
+        {
+            return addFunc(value1, value2)
+        }
 
-      val result = add{ x , y -> x + y }
-      print("${result}")
+    val result = add(10, 20) { x , y -> x + y }
+
+
+    print("${result}")
+
+    결과값 -> 30
     ```
 
+- Dart에서는 Maps을 간단하게 { key, value } 로도 표현 할 수 있다.
+  ``` Dart
+  - Dart
+
+  val temp = [
+      {'One': 1},
+      {'Two': 2}
+    ]
+
+  key 값 'One' 넣으면 1 나옴
+  ```
+
+  ``` Kotlin
+  - Kotlin
+
+  val map = HashMap<String, Int>()
+
+  map["One"] = 1
+
+  println("${map["One"]}")
+  결과값 -> 1
+  ```
 
   
