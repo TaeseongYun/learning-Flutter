@@ -13,18 +13,17 @@ class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
 
   var questions = [
-
     // map's all of them each others
     {
-      'questionText': 'What\'s your favorite color?',
+      'questionTexts': 'What\'s your favorite color?',
       'answer': ['Green', 'Yellow', 'Red', 'Blue']
     },
     {
-      'questionText': 'What\'s your favorite animal?',
+      'questionTexts': 'What\'s your favorite animal?',
       'answer': ['Rabbit', 'Snake', 'Lion', 'Elephant']
     },
     {
-      'questionText': 'Who\'s your favorite instructor?',
+      'questionTexts': 'Who\'s your favorite instructor?',
       'answer': ['Max', 'Max', 'Max', 'Max']
     }
   ];
@@ -44,11 +43,12 @@ class _MyAppState extends State<MyApp> {
         body: Column(
           children: <Widget>[
             Question(
-              questionText: questions[_questionIndex],
+              questionText: questions[_questionIndex]['questionTexts'],
             ),
-            Answer(sendedHandler: answerQuestions),
-            Answer(sendedHandler: answerQuestions),
-            Answer(sendedHandler: answerQuestions)
+            ...(questions[_questionIndex]['answer'] as List<String>)
+                .map((answer) {
+              return Answer(sendedHandler: answerQuestions, answerText: answer);
+            }).toList()
           ],
         ),
       ),
