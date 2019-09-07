@@ -28,9 +28,15 @@
 - Dart 언어 에서는 private, protected, internal같은 접근 제한자가 없다, `_(underLine)`를 사용한 변수나 함수는 `private`가 된다.
 
 # Function Keyword
-- 이 키워드는 함수에서 매개변수를 함수를 사용하거나 포인터를 사용했을 시 이용하는 키워드이다. Kotlin개발 했던 나에겐 이것이 Function 키워드 라고 생각하면 쉬울 것이다.
+- 이 키워드는 함수에서 매개변수를 함수를 사용하거나 포인터를 사용했을 시 이용하는 키워드이다. Kotlin개발 했던 나에겐 이것(고차함수)이 Function 키워드 라고 생각하면 쉬울 것이다.
 
   ```Kotlin
+
+  -Dart Function keyword is similar
+   kotlin 고차함수
+
+   Kotlin 고차함수
+
     fun add( value1: Int, value2: Int, 
         addFunc: (a: Int, b: Int) -> Int): Int 
         {
@@ -68,4 +74,122 @@
   결과값 -> 1
   ```
 
+# What is the spread operator??
+
+- Dart 언어에서는 스프레드 연산자(...) NULL을 허용한 스프레드 (...?)를 이용하여 여러요소를 간결하게 컬렉션에 삽입 가능하다.
+
+- 또한 Dart 2.3에서는 컬렉션 if 컬렉션 for 가 등장하여 컬렉션 내부에서도 for, if 사용 가능하다
+
+EX)
+```Dart
+var world = [
+    'USA',
+    'England',
+    'Russia',
+    if(asianCity) 'Korea'
+]
+print('${world}')
+
+(if가 만족했다고 가정) 실행결과 -> ['USA', 'England', 'Russia', 'Korea']
+
+var listOfInts = [1, 2, 3];
+var listOfString = [
+    '#0',
+    for(var item in listOfInts) '#$item'
+]
+print('${listOfString}')
+실행결과 -> ['#0', '#1', '#2', '#3']
+```
+
+- Dart 언어에서도 Java와 마찬가지로 3항 연산자가 존재
+
+EX)
+```Dart
+_questionsText(; private와 같은 접근제한자가 없어 underline이 접근제한자로 대체) < = question.length ? Text('It is  true') : Text('It is false')
+```
+
+# How to do I make splitting widget?
+- Scaffold의 내부 파라미터 body에서 코드 작성 시 많은 위젯들을 추가하면 가독성이 매우 떨어진다 예시로는 다음과 같다.
+
+```Dart
+@override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('It`s my first app'),
+        ),
+        body: _questionIndex < questions.length
+            ? Column(
+                children: <Widget>[
+                  Question(
+                    questionText: questions[_questionIndex]['questionTexts'],
+                  ),
+                  ...(questions[_questionIndex]['answer'] as List<String>)
+                      .map((answer) {
+                    return Answer(
+                        sendedHandler: answerQuestions, answerText: answer);
+                  }).toList()
+                ],
+              )
+            : Center(
+                child: Text('You did it!!'),
+              ),
+      ),
+    );
+  }
+  ```
+
+  해당 코드를 customizing 하기전 위젯 클래스를 만들어 준다.
   
+  EX)
+```Dart
+class Quiz extends StatelessWidget {
+  final List<Map<String, Object>> questions;
+  final Function answerQuestions;
+  final int questionIndex;
+
+  Quiz(
+      {@required this.answerQuestions,
+      @required this.questions,
+      @required this.questionIndex}
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Question(
+          questionText: questions[questionIndex]['questionTexts'],
+        ),
+        ...(questions[questionIndex]['answer'] as List<String>).map((answer) {
+          return Answer(sendedHandler: answerQuestions, answerText: answer);
+        }).toList()
+      ],
+    );
+  }
+}
+```
+
+그후 Scaffold의 body parameter에 사용!
+```Dart
+@override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('It`s my first app'),
+        ),
+        body: _questionIndex < questions.length
+            ? Quiz(
+                answerQuestions: answerQuestions,
+                questions: questions,
+                questionIndex: _questionIndex,
+              )
+            : Center(
+                child: Text('You did it!!'),
+              ),
+      ),
+    );
+  }
+```
