@@ -7,6 +7,17 @@ class NewTransaction extends StatelessWidget {
 
   final _amountController = TextEditingController();
 
+  void _submitTransactionData() {
+    final tsInputTitle = _titleController.text;
+    final tsInputAmount = double.parse(_amountController.text);
+
+    if (tsInputAmount <= 0 || tsInputTitle.isEmpty) {
+      return;
+    }
+    addNewTransactionHandler(
+        _titleController.text, double.parse(_amountController.text));
+  }
+
   NewTransaction({this.addNewTransactionHandler});
   @override
   Widget build(BuildContext context) {
@@ -26,12 +37,13 @@ class NewTransaction extends StatelessWidget {
               decoration: InputDecoration(labelText: 'Amout'),
               controller: _amountController,
               // onChanged: (input) => inputAmount = input,
+              keyboardType: TextInputType.number,
+              onSubmitted: (_) => _submitTransactionData(),
             ),
             FlatButton(
               child: Text('Add transaction!'),
               textColor: Colors.purple,
-              onPressed: () => addNewTransactionHandler(
-                  _titleController.text, double.parse(_amountController.text)),
+              onPressed: _submitTransactionData,
             )
           ],
         ),

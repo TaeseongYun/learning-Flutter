@@ -20,23 +20,34 @@ class MyHomePage extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: Text('Purchase List APP'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.add_alert),
+              onPressed: () => print('object'),
+            )
+          ],
         ),
-        body:  Column(
-            // mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Card(
-                color: Colors.blue,
-                child: Container(
-                  width: double.infinity,
-                  child: Text('chart'),
-                ),
-                elevation: 5,
+        body: Column(
+          // mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Card(
+              color: Colors.blue,
+              child: Container(
+                width: double.infinity,
+                child: Text('chart'),
               ),
-              UserTransaction(),
-            ],
-          ),
+              elevation: 5,
+            ),
+            UserTransaction(),
+          ],
         ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () => null,
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      ),
     );
   }
 }
