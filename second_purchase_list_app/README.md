@@ -13,4 +13,15 @@
 
 ## ETC.
 - 생성자 만들때에는 제일 처음 매개변수로 _(underLine; private) 가 못온다는 사실을 알게 되었다.
-- onPressed:() => test() 의 정확한 사용 이유는 해당 함수에서 arguments 를 전달 즉 파라미터를 전달 해주기 위해서 사용하는 것(개인적인 생각)
+
+- 1- onPressed:() => test() , 2 - onPressed:() {//다른 행동 가능// test() //다른 행동 가능//}, 3 -onPressed: test,
+-> 1번과 2번의 차이 Dart 언어에서 => 는 표현식 일때만 사용가능 즉, onPressed함수가 실행될 때 변수가 필요하면 2번을 사용 아니면 1번을 사용한다.(함수에 매개변수가 들어가는 경우)
+3번은 함수에 매개변수가 없을 때 주로 사용하는 방식.
+
+- BottomSheet왁 같이 화면이 Stack 처럼 겹겹이 쌓이는 View는 MediaQuery로 화면 크기를 가져와야한다. 미디어 쿼리는 MaterialApp클래스가 초기화 되는 시점에 생성되는데 처음엔 StatefulWidget 하나의 클래스로만 runApp을 하여서 MaterialApp클래스가 끝까지 초기화가 되지 않아 MediaQuery 에러가 계속 나는 것이었다.
+  후에 보니 StatelessWidget 으로 MaterialApp클래스를 초기화 완료 하니 에러가 사라짐
+  => MyRootPage()이름은 가지고 StatelessWidget을 상속받는 클래스를 runApp에 넣어 주었음.
+
+# StatefulWidget 안의 widget Property
+- StatefulWidget 클래스를 생성하게 되면 총 2개의 클래스가 생성된다.
+  하나는 StatefulWidget을 상속받는 클래스 다른 하나는 State<T> 를 상속받는 클래스가 생성되게 되는데 주로 이용되는건 StatefulWidget클래스 그러기때문에 생성자도 StatefulWidget을 상속받는 클래스에서 만들게 된다. 하지만 기술적으로 보면 어느 한 클래스에서 생성한 함수는 다른 클래스에서 객체를 만들지 않고선 사용할 수 없다. Flutter 에서는 고맙게도 이를 widget property가 대신하여 접근이 가능하게 만들어 준다.

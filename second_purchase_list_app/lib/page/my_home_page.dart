@@ -1,53 +1,87 @@
 import 'package:flutter/material.dart';
-import 'package:second_purchase_list_app/widgets/new_transaction.dart';
-import 'package:second_purchase_list_app/widgets/user_transaction.dart';
 import '../widgets/transaction_list.dart';
+import '../widgets/new_transaction.dart';
 import '../models/transaction.dart';
 
-class MyHomePage extends StatelessWidget {
-  final _dateFormat = 'yyyy-MM-dd';
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
 
-  // String inputTitle;
-  // String inputAmount;
+class _MyHomePageState extends State<MyHomePage> {
+  final List<Transaction> _userTransaction = [
+    Transaction(
+      amount: 7.77,
+      date: DateTime.now(),
+      id: 'Tae1',
+      title: 'Seong Test',
+    ),
+    Transaction(
+      amount: 6.54,
+      date: DateTime.now(),
+      id: 'Tae2',
+      title: 'Weekly Test',
+    )
+  ];
 
-  final _titleController = TextEditingController();
-  final _amountController = TextEditingController();
+  void _addNewTransaction(String txTitle, double txAmount) {
+    final newTx = Transaction(
+      title: txTitle,
+      amount: txAmount,
+      date: DateTime.now(),
+      id: DateTime.now().toString(),
+    );
+
+    setState(() {
+      _userTransaction.add(newTx);
+    });
+  }
+
+  void _startAddNewTransaction(BuildContext cnt) {
+    showModalBottomSheet<void>(
+        context: cnt,
+        builder: (_) => GestureDetector(
+              onTap: () {},
+              child: NewTransaction(
+                addNewTransactionHandler: _addNewTransaction,
+              ),
+              behavior: HitTestBehavior.opaque,
+            ));
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My Second Flutter APP',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Purchase List APP'),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.add_alert),
-              onPressed: () => print('object'),
-            )
-          ],
-        ),
-        body: Column(
-          // mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Card(
-              color: Colors.blue,
-              child: Container(
-                width: double.infinity,
-                child: Text('chart'),
-              ),
-              elevation: 5,
-            ),
-            UserTransaction(),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () => null,
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Purchase List APP'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.add_alert),
+            onPressed: () => _startAddNewTransaction(context),
+          )
+        ],
       ),
+      body: Column(
+        // mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Card(
+            color: Colors.blue,
+            child: Container(
+              width: double.infinity,
+              child: Text('chart'),
+            ),
+            elevation: 5,
+          ),
+          TransactionList(
+            userTransaction: _userTransaction,
+          )
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () => _startAddNewTransaction(context)),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

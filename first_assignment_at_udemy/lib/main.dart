@@ -16,8 +16,10 @@ class _MyAppState extends State<MyApp> {
     'And I clicked button'
   ];
 
-  void _myCustomFunction() {
-    setState(() => _listIndex += 1);
+  void _myCustomFunction(BuildContext cnt) {
+    showModalBottomSheet(context: cnt, builder: (BuildContext cnt) {
+      return Icon(Icons.add);
+    });
   }
 
   void _myCustomResetFunction() {
@@ -34,7 +36,7 @@ class _MyAppState extends State<MyApp> {
           title: Text('My First Assignment'),
         ),
         body: MyColumn(
-          onClickFunction: _myCustomFunction,
+          onClickFunction: () => _myCustomFunction(context),
           myChangedText: stringList[_listIndex],
           outOfIndex: _listIndex,
           onClickResetFunction: _myCustomResetFunction,
