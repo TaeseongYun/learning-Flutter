@@ -25,3 +25,8 @@
 # StatefulWidget 안의 widget Property
 - StatefulWidget 클래스를 생성하게 되면 총 2개의 클래스가 생성된다.
   하나는 StatefulWidget을 상속받는 클래스 다른 하나는 State<T> 를 상속받는 클래스가 생성되게 되는데 주로 이용되는건 StatefulWidget클래스 그러기때문에 생성자도 StatefulWidget을 상속받는 클래스에서 만들게 된다. 하지만 기술적으로 보면 어느 한 클래스에서 생성한 함수는 다른 클래스에서 객체를 만들지 않고선 사용할 수 없다. Flutter 에서는 고맙게도 이를 widget property가 대신하여 접근이 가능하게 만들어 준다.
+
+## ThemeData.light().texttheme.copyWith()??
+  - copyWith메소드를 사용하게 되면 해당 메소드 안에서 사용한 property를 merge하게 된다.
+
+전체를 merge하고싶으면 merge()메소드를 사용하면된다.
