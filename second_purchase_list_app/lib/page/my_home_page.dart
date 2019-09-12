@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/chart.dart';
 import '../widgets/transaction_list.dart';
 import '../widgets/new_transaction.dart';
 import '../models/transaction.dart';
@@ -23,6 +24,14 @@ class _MyHomePageState extends State<MyHomePage> {
     //   title: 'Weekly Test',
     // )
   ];
+
+  List<Transaction> get _recentTransactions => _userTransaction
+      .where((tx) => tx.date.isAfter(
+            DateTime.now().subtract(
+              Duration(days: 7),
+            ),
+          ))
+      .toList();
 
   void _addNewTransaction(String txTitle, double txAmount) {
     final newTx = Transaction(
@@ -68,13 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
         // mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Card(
-            color: Colors.blue,
-            child: Container(
-              width: double.infinity,
-              child: Text('chart'),
-            ),
-            elevation: 5,
+          Chart(
+            recentTrasactions: _recentTransactions,
           ),
           TransactionList(
             userTransaction: _userTransaction,
@@ -84,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () => _startAddNewTransaction(context)),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
