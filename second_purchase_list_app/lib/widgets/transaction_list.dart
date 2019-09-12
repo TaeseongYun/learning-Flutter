@@ -22,7 +22,7 @@ class TransactionList extends StatelessWidget {
                 //   height: 20,
                 // ),
                 Container(
-                  margin: EdgeInsets.only(top: 10),
+                    margin: EdgeInsets.only(top: 10),
                     height: 200,
                     child: Image.asset(
                       'assets/images/waiting.png',
@@ -31,49 +31,28 @@ class TransactionList extends StatelessWidget {
               ],
             )
           : ListView.builder(
-              itemBuilder: (ctx, index) {
-                return Card(
-                  elevation: 4,
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                        child: Text(
-                          '\$: ${userTransaction[index].amount.toStringAsFixed(2)}',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                          color: Theme.of(context).primaryColor,
-                          width: 2,
-                        )),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            userTransaction[index].title,
-                            style: Theme.of(context).textTheme.title,
-                          ),
-                          Text(
-                            DateFormat.yMMMd('en_US')
-                                .format(userTransaction[index].date),
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
+              itemBuilder: (ctx, index) => Card(
+                elevation: 5,
+                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    radius: 30,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Text('\$ ${userTransaction[index].amount}')),
+                    ),
                   ),
-                );
-              },
+                  title: Text(
+                    userTransaction[index].title,
+                    style: Theme.of(context).textTheme.title,
+                  ),
+                  subtitle: Text(
+                    DateFormat.yMMMd().format(userTransaction[index].date),
+                  ),
+                ),
+              ),
               itemCount: userTransaction.length,
             ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/material/date_picker.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addNewTransactionHandler;
@@ -28,6 +29,15 @@ class _NewTransactionState extends State<NewTransaction> {
     Navigator.of(context).pop();
   }
 
+  void _showDatePicker(BuildContext cnt) {
+    showDatePicker(
+      context: cnt,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2000),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -49,9 +59,26 @@ class _NewTransactionState extends State<NewTransaction> {
               keyboardType: TextInputType.number,
               onSubmitted: (_) => _submitTransactionData(),
             ),
-            FlatButton(
+            Container(
+              height: 70,
+              child: Row(
+                children: <Widget>[
+                  Text('No Date Choosen'),
+                  FlatButton(
+                    child: Text(
+                      'Choose Date',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () => _showDatePicker(context),
+                    textColor: Theme.of(context).primaryColor,
+                  ),
+                ],
+              ),
+            ),
+            RaisedButton(
               child: Text('Add transaction!'),
-              textColor: Colors.purple,
+              color: Theme.of(context).primaryColor,
+              textColor: Theme.of(context).textTheme.button.color,
               onPressed: _submitTransactionData,
             )
           ],
