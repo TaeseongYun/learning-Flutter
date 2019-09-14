@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/date_picker.dart';
+import 'package:intl/intl.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addNewTransactionHandler;
@@ -14,28 +14,42 @@ class _NewTransactionState extends State<NewTransaction> {
   final _titleController = TextEditingController();
 
   final _amountController = TextEditingController();
+  DateTime _selectedDate;
 
   void _submitTransactionData() {
+    if (_amountController.text.isEmpty) {
+      return;
+    }
     final tsInputTitle = _titleController.text;
     final tsInputAmount = double.parse(_amountController.text);
 
-    if (tsInputAmount <= 0 || tsInputTitle.isEmpty) {
+    if (tsInputAmount <= 0 || tsInputTitle.isEmpty || _selectedDate == null) {
       return;
     }
 
     widget.addNewTransactionHandler(
-        _titleController.text, double.parse(_amountController.text));
+      _titleController.text,
+      double.parse(_amountController.text),
+      _selectedDate,
+    );
 
     Navigator.of(context).pop();
   }
 
-  void _showDatePicker(BuildContext cnt) {
+  void _showDatePicker() {
     showDatePicker(
-      context: cnt,
+      context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2000),
-    );
+      firstDate: DateTime(2019),
+      lastDate: DateTime.now(),
+    ).then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      }
+      setState(() {
+        _selectedDate = pickedDate;
+      });
+    });
   }
 
   @override
@@ -63,13 +77,15 @@ class _NewTransactionState extends State<NewTransaction> {
               height: 70,
               child: Row(
                 children: <Widget>[
-                  Text('No Date Choosen'),
+                  Text(_selectedDate == null
+                      ? 'No Date Choosen'
+                      : 'Picked Date : ${DateFormat.yMd().format(_selectedDate)}'),
                   FlatButton(
                     child: Text(
                       'Choose Date',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    onPressed: () => _showDatePicker(context),
+                    onPressed: _showDatePicker,
                     textColor: Theme.of(context).primaryColor,
                   ),
                 ],
