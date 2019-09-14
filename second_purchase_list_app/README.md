@@ -30,3 +30,6 @@
   - copyWith메소드를 사용하게 되면 해당 메소드 안에서 사용한 property를 merge하게 된다.
 
 전체를 merge하고싶으면 merge()메소드를 사용하면된다.
+
+## then() Function??
+- 미국 인턴때 여러번 사용한 Typescript내에서는 Promise형 Dart안에서는 `Future`형 함수 실행 형태는 어떤 행동이 이루어졌을 시 함수를 취한다 라는 뜻 then함수는 파라매터로 Function을 받는다.

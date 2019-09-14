@@ -10,20 +10,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _userTransaction = [
-    // Transaction(
-    //   amount: 7.77,
-    //   date: DateTime.now(),
-    //   id: 'Tae1',
-    //   title: 'Seong Test',
-    // ),
-    // Transaction(
-    //   amount: 6.54,
-    //   date: DateTime.now(),
-    //   id: 'Tae2',
-    //   title: 'Weekly Test',
-    // )
-  ];
+  final List<Transaction> _userTransaction = [];
 
   List<Transaction> get _recentTransactions => _userTransaction
       .where((tx) => tx.date.isAfter(
@@ -67,31 +54,44 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Personal Expenses',
-          style: TextStyle(fontFamily: 'Opensans'),
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add_alert),
-            onPressed: () => _startAddNewTransaction(context),
-          )
-        ],
+    final appBar = AppBar(
+      title: Text(
+        'Personal Expenses',
+        style: TextStyle(fontFamily: 'Opensans'),
       ),
-      body: Column(
-        // mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Chart(
-            recentTrasactions: _recentTransactions,
-          ),
-          TransactionList(
-            userTransaction: _userTransaction,
-            deleteTransaction:  _deleteTransaction,
-          )
-        ],
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add_alert),
+          onPressed: () => _startAddNewTransaction(context),
+        )
+      ],
+    );
+    return Scaffold(
+      appBar: appBar,
+      body: SingleChildScrollView(
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height) *
+                  0.3,
+              child: Chart(
+                recentTrasactions: _recentTransactions,
+              ),
+            ),
+            Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height) *
+                  0.7,
+              child: TransactionList(
+                userTransaction: _userTransaction,
+                deleteTransaction: _deleteTransaction,
+              ),
+            )
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
