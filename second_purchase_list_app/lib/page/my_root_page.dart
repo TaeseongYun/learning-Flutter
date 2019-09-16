@@ -8,7 +8,6 @@ class MyRootPage extends StatelessWidget {
     return MaterialApp(
       title: 'Personal Expenses',
       theme: ThemeData(
-          brightness: Platform.isAndroid ? Brightness.dark : Brightness.light,
           primarySwatch: Colors.cyan,
           accentColor: Colors.amber,
           fontFamily: 'Quicksand',

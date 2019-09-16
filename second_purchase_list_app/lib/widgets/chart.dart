@@ -17,7 +17,6 @@ class Chart extends StatelessWidget {
 
         print('weekDay 가 뭐야? => $weekDay');
         for (var i = 0; i < recentTrasactions.length; i++) {
-          // print('For문 들어왔습니다.');
           // print('What is recentTransactions[i]? => ${recentTrasactions[i]}');
 
           if (recentTrasactions[i].date.day == weekDay.day &&
