@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/chart_bar.dart';
-import '../models/transaction.dart';
+import '../../models/transaction.dart';
 import 'package:intl/intl.dart';
 
 class Chart extends StatelessWidget {
@@ -15,26 +15,26 @@ class Chart extends StatelessWidget {
         );
         var totalSum = 0.0;
 
-        print('weekDay 가 뭐야? => $weekDay');
+        // print('weekDay 가 뭐야? => $weekDay');
         for (var i = 0; i < recentTrasactions.length; i++) {
           // print('What is recentTransactions[i]? => ${recentTrasactions[i]}');
 
           if (recentTrasactions[i].date.day == weekDay.day &&
               recentTrasactions[i].date.month == weekDay.month &&
               recentTrasactions[i].date.year == weekDay.year) {
-            print(
-                'recentTransactions[i] 와 weekDay => ${recentTrasactions[i].date.day}, ${weekDay.day}');
+            // print(
+            //     'recentTransactions[i] 와 weekDay => ${recentTrasactions[i].date.day}, ${weekDay.day}');
 
-            print(
-                'recentTransactions[i] 와 weekDay => ${recentTrasactions[i].date.month}, ${weekDay.month}');
+            // print(
+            //     'recentTransactions[i] 와 weekDay => ${recentTrasactions[i].date.month}, ${weekDay.month}');
             totalSum += recentTrasactions[i].amount;
           }
         }
 
-        print(
-            'What is DateFormat.E(weekDay)?? => ${DateFormat.E().format(weekDay)}');
+        // print(
+        //     'What is DateFormat.E(weekDay)?? => ${DateFormat.E().format(weekDay)}');
 
-        print('How much is totalSum?? => ${totalSum}');
+        // print('How much is totalSum?? => ${totalSum}');
 
         return {
           'day': DateFormat.E().format(weekDay).substring(0, 1),
@@ -47,6 +47,7 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Here is Chart build()');
     return Card(
       elevation: 6,
       margin: EdgeInsets.all(20),

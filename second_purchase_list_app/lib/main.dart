@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import './page/my_root_page.dart';
+import './ui/page/my_root_page.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations([

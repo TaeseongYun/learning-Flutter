@@ -33,3 +33,12 @@
 
 ## then() Function??
 - 미국 인턴때 여러번 사용한 Typescript내에서는 Promise형 Dart안에서는 `Future`형 함수 실행 형태는 어떤 행동이 이루어졌을 시 함수를 취한다 라는 뜻 then함수는 파라매터로 Function을 받는다.
+
+## Cupertino Widget , FractionallySizedBox
+- iOS 위젯 Optional하게 사용 가능 하다 , FractionallySizedBox는 사용 가능 한 총 공간이 있지만 일부로 자식의 크기를 조절하는 클래스
+
+## GestureDetector
+
+- iOS 에는 IconButton이 따로 없기 때문에 GestureDetector로 감지 해야 한다.
+- `Platform`클래스 사용하여 Android와 iOS를 구분한다.
+- LayoutBuilder context와 constraint을 사용하여 넓이를 제한을 주는 것이다.(수정하면서 공부 할 것)

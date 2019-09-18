@@ -2,12 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../models/transaction.dart';
 import '../widgets/chart.dart';
 import '../widgets/transaction_list.dart';
 import '../widgets/new_transaction.dart';
-import '../models/transaction.dart';
 
 class MyHomePage extends StatefulWidget {
+  
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -23,8 +24,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ))
       .toList();
 
+
   bool _showChart = false;
-  bool _showDarkMode = false;
 
   void _addNewTransaction(
       String txTitle, double txAmount, DateTime chosenDate) {
@@ -60,10 +61,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print('Here is MyHomePage build()');
     final mediaQuery = MediaQuery.of(context);
-
     final isLandScape = mediaQuery.orientation == Orientation.landscape;
-    final ObstructingPreferredSizeWidget appBar = Platform.isIOS
+    final PreferredSizeWidget appBar = Platform.isIOS
         ? CupertinoNavigationBar(
             middle: Text(
               'Personal Expenses',
@@ -98,51 +99,53 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
 
-    final pageBody = SingleChildScrollView(
-      child: Column(
-        // mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          if (isLandScape)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text('Show Chart'),
-                Switch.adaptive(
-                  value: _showChart,
-                  onChanged: (val) {
-                    setState(() {
-                      _showChart = val;
-                    });
-                  },
-                ),
-              ],
-            ),
-          if (!isLandScape)
-            Column(
-              children: <Widget>[
-                Container(
-                    height:
-                        (mediaQuery.size.height - appBar.preferredSize.height) *
-                            0.3,
-                    child: Chart(
-                      recentTrasactions: _recentTransactions,
-                    )),
-                txListWidget
-              ],
-            ),
-          if (isLandScape)
-            _showChart
-                ? Container(
-                    height:
-                        (mediaQuery.size.height - appBar.preferredSize.height) *
-                            0.7,
-                    child: Chart(
-                      recentTrasactions: _recentTransactions,
-                    ),
-                  )
-                : txListWidget
-        ],
+    final pageBody = SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            if (isLandScape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('Show Chart', style: Theme.of(context).textTheme.title,),
+                  Switch.adaptive(
+                    value: _showChart,
+                    onChanged: (val) {
+                      setState(() {
+                        _showChart = val;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            if (!isLandScape)
+              Column(
+                children: <Widget>[
+                  Container(
+                      height: (mediaQuery.size.height -
+                              appBar.preferredSize.height) *
+                          0.3,
+                      child: Chart(
+                        recentTrasactions: _recentTransactions,
+                      )),
+                  txListWidget
+                ],
+              ),
+            if (isLandScape)
+              _showChart
+                  ? Container(
+                      height: (mediaQuery.size.height -
+                              appBar.preferredSize.height) *
+                          0.7,
+                      child: Chart(
+                        recentTrasactions: _recentTransactions,
+                      ),
+                    )
+                  : txListWidget
+          ],
+        ),
       ),
     );
 
