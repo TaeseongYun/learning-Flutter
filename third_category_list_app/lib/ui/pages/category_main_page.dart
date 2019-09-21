@@ -10,6 +10,7 @@ class CategoryMainPage extends StatelessWidget {
         title: const Text('DeliMeal'),
       ),
       body: GridView(
+        padding: EdgeInsets.all(25),
         children: DUMMY_CATEGORIES
             .map((dummy) => CategoryItem(
                   color: dummy.color,
@@ -18,10 +19,23 @@ class CategoryMainPage extends StatelessWidget {
             .toList(),
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200,
-          childAspectRatio: 3 / 2,
+          childAspectRatio: 1.5,
           crossAxisSpacing: 20,
           mainAxisSpacing: 20,
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.voice_chat),
+            title: Text('HomePage'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_border),
+            title: Text('Favorite'),
+          )
+        ],
       ),
     );
   }
