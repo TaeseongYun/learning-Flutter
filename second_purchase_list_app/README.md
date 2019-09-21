@@ -42,3 +42,11 @@
 - iOS 에는 IconButton이 따로 없기 때문에 GestureDetector로 감지 해야 한다.
 - `Platform`클래스 사용하여 Android와 iOS를 구분한다.
 - LayoutBuilder context와 constraint을 사용하여 넓이를 제한을 주는 것이다.(수정하면서 공부 할 것)
+
+## Stateless  vs  Stateful lifecycle 차이점
+
+- Stateless는 Constructor 호출 후 바로 build 생성
+- Stateful은 Constructor 호출 후  initState() -> build() -> (사용자가 입력에 따라) setState() -> didUpdateWidget() -> 다시 build() 호출
+
+## key 란 무엇인가?
+[Youtube 바로가기](youtube.com/watch?v=kn0EOS-ZiIc)

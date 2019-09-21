@@ -33,12 +33,10 @@ class TransactionList extends StatelessWidget {
             ),
           )
         : ListView.builder(
-            itemBuilder: (ctx, index) => Card(
-              elevation: 5,
-              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-              child: TramsactionItem(
-                  userTransaction: userTransaction[index],
-                  deleteTransaction: deleteTransaction),
+            itemBuilder: (ctx, index) => TransactionItem(
+              key: ValueKey(userTransaction[index].id),
+              deleteTransaction: deleteTransaction,
+              userTransaction: userTransaction[index],
             ),
             itemCount: userTransaction.length,
           );
