@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:third_category_list_app/ui/widgets/category_item.dart';
+import '../widgets/category_item.dart';
 import '../../model/dummy_data.dart';
 
 class CategoryMainPage extends StatelessWidget {
@@ -13,6 +13,7 @@ class CategoryMainPage extends StatelessWidget {
         padding: EdgeInsets.all(25),
         children: DUMMY_CATEGORIES
             .map((dummy) => CategoryItem(
+                  id: dummy.id,
                   color: dummy.color,
                   title: dummy.title,
                 ))

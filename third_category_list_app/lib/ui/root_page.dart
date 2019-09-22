@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:third_category_list_app/ui/pages/category_main_page.dart';
+import 'package:third_category_list_app/router.dart';
+import '../ui/pages/category_main_page.dart';
 
 class RootPage extends StatelessWidget {
   @override
