@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:third_category_list_app/ui/pages/category_main_page.dart';
+import './ui/pages/category_main_page.dart';
+import './ui/pages/meal_detail_page.dart';
 import './ui/pages/category_meal_page.dart';
 
 class Router {
   static const categoryMain = '/';
   static const categoryMeals = '/category-meals';
+  static const mealDetailPage = '/meal-detail';
 
 //  Widget _router(String url, dynamic params) {
 //    String pageId = _pageIdMap[url];
@@ -20,11 +22,18 @@ class Router {
     switch (url) {
       case categoryMain:
         return CategoryMainPage();
+        break;
       case categoryMeals:
         return CategoryMealsPage(
           routeId: params['id'],
           routeTitle: params['title'],
         );
+        break;
+      case mealDetailPage:
+        return MealDetailPage(
+          mealId: params['id'],
+        );
+        break;
     }
     return null;
   }

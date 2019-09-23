@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:third_category_list_app/router.dart';
+import 'package:third_category_list_app/ui/pages/category_meal_page.dart';
+import 'package:third_category_list_app/ui/pages/tabs_page.dart';
 import '../ui/pages/category_main_page.dart';
 
 class RootPage extends StatelessWidget {
@@ -7,7 +9,7 @@ class RootPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'DeliMeals',
-      home: CategoryMainPage(),
+      home: TabsPage(),
       theme: ThemeData(
         primarySwatch: Colors.pink,
         accentColor: Colors.amber,
