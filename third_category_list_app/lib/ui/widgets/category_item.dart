@@ -19,6 +19,7 @@ class CategoryItem extends StatelessWidget {
           'id': id,
           'title': title,
         },
+        null
       ),
       splashColor: Theme.of(context).primaryColor,
       borderRadius: BorderRadius.circular(15),

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../model/dummy_data.dart';
+import '../../router.dart';
 
 class MealDetailPage extends StatelessWidget {
   final String mealId;
@@ -111,6 +112,10 @@ class MealDetailPage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Router.popPage(context, mealId),
+        child: Icon(Icons.delete),
       ),
     );
   }
