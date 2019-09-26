@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:third_category_list_app/model/dummy_data.dart';
 import '../../ui/widgets/meal_item.dart';
 import '../../model/meal.dart';
 
 class CategoryMealsPage extends StatefulWidget {
-  final String routeTitle;
-  final String routeId;
-
   final List<Meal> availableMeals;
 
-  CategoryMealsPage({this.routeId, this.routeTitle, this.availableMeals});
+  CategoryMealsPage({this.availableMeals});
 
   @override
   _CategoryMealsPageState createState() => _CategoryMealsPageState();
@@ -16,24 +14,30 @@ class CategoryMealsPage extends StatefulWidget {
 
 class _CategoryMealsPageState extends State<CategoryMealsPage> {
   String categoryTitle;
+  String categoryId;
   List<Meal> displayedMeals;
   var _loadedInitData = false;
 
   @override
   void initState() {
     //...
-    if (!_loadedInitData)
-      displayedMeals = widget.availableMeals
-          .where(
-            (meal) => meal.categories.contains(widget.routeId),
-          )
-          .toList();
-    _loadedInitData = true;
+
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
+    final routeArgs =
+        ModalRoute.of(context).settings.arguments as Map<String, String>;
+    categoryTitle = routeArgs['title'];
+    categoryId = routeArgs['id'];
+    if (!_loadedInitData)
+      displayedMeals = DUMMY_MEALS
+          .where(
+            (meal) => meal.categories.contains(categoryId),
+          )
+          .toList();
+    _loadedInitData = true;
     print('didChangeDepenedcies 호출!!');
     super.didChangeDependencies();
   }
@@ -49,7 +53,7 @@ class _CategoryMealsPageState extends State<CategoryMealsPage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            widget.routeTitle,
+            categoryTitle,
           ),
         ),
         body: ListView.builder(
@@ -60,7 +64,6 @@ class _CategoryMealsPageState extends State<CategoryMealsPage> {
             affordability: displayedMeals[index].affordability,
             complexity: displayedMeals[index].complexity,
             duration: displayedMeals[index].duration,
-            removedItem: _removedMeal,
           ),
           itemCount: displayedMeals.length,
         ));

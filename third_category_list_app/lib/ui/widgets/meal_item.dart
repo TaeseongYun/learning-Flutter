@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../model/meal.dart';
-import '../../router.dart';
+import '../../route/router.dart';
 
 class MealItem extends StatelessWidget {
   final String id;
@@ -9,16 +9,15 @@ class MealItem extends StatelessWidget {
   final int duration;
   final Complexity complexity;
   final Affordability affordability;
-  final Function removedItem;
 
-  MealItem(
-      {@required this.id,
-      @required this.title,
-      @required this.imageUrl,
-      @required this.duration,
-      @required this.complexity,
-      @required this.affordability,
-      @required this.removedItem});
+  MealItem({
+    @required this.id,
+    @required this.title,
+    @required this.imageUrl,
+    @required this.duration,
+    @required this.complexity,
+    @required this.affordability,
+  });
 
   String get complexityText {
     switch (complexity.index) {
@@ -50,15 +49,21 @@ class MealItem extends StatelessWidget {
     }
   }
 
+  void selectMeal(BuildContext ctx) {
+    Navigator.of(ctx).pushNamed(
+      Router.mealDetailPage,
+      arguments: id,
+    ).then((result) {
+      if(result != null) {
+        // removeItem(result);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Router.push(
-        context,
-        Router.mealDetailPage,
-        {'id': id},
-        removedItem
-      ),
+      onTap: () => selectMeal(context),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),

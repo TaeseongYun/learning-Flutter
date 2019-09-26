@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:third_category_list_app/model/dummy_data.dart';
-import 'package:third_category_list_app/router.dart';
+import '../route/router.dart';
 import 'package:third_category_list_app/ui/pages/category_meal_page.dart';
 import 'package:third_category_list_app/ui/pages/filters_page.dart';
+import 'package:third_category_list_app/ui/pages/meal_detail_page.dart';
 import 'package:third_category_list_app/ui/pages/tabs_page.dart';
 import '../ui/pages/filters_page.dart';
 import '../model/meal.dart';
@@ -20,7 +21,8 @@ class _RootPageState extends State<RootPage> {
     'vegetarian': false,
   };
 
-  static List<Meal> _availableMeals = DUMMY_MEALS;
+  List<Meal> _availableMeals = DUMMY_MEALS;
+  List<Meal> _favoriteMeals = [];
 
   void _setFilters(Map<String, bool> filterData) {
     setState(() {
@@ -44,11 +46,29 @@ class _RootPageState extends State<RootPage> {
     });
   }
 
+  void _toggleFavorite(String mealId) {
+    final exstingIndex = _favoriteMeals.indexWhere((meal) => meal.id == mealId);
+
+    if (exstingIndex >= 0) {
+      setState(() {
+        _favoriteMeals.removeAt(exstingIndex);
+      });
+    } else {
+      setState(() {
+        _favoriteMeals.add(DUMMY_MEALS.firstWhere((meal) => meal.id == mealId));
+      });
+    }
+  }
+
+  bool _isMealFavorite(String id) {
+    return _favoriteMeals.any((meal) => meal.id == id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'DeliMeals',
-      home: TabsPage(),
+      // home: TabsPage(),
       theme: ThemeData(
         primarySwatch: Colors.pink,
         accentColor: Colors.amber,
@@ -64,12 +84,23 @@ class _RootPageState extends State<RootPage> {
               ),
             ),
       ),
+      initialRoute: Router.categoryMain,
       routes: {
         //라우터 클래스를 만들었지만 home에서 url 인식을 하지 못해 추가해주었음.
         Router.filtersPage: (context) => FilterPage(
               currentFilter: _filters,
               saveFilters: _setFilters,
             ),
+        Router.categoryMain: (context) => TabsPage(
+              favoriteMeals: _favoriteMeals,
+            ),
+        Router.mealDetailPage: (context) => MealDetailPage(
+              favoriteList: _toggleFavorite,
+              isFavorite: _isMealFavorite,
+            ),
+        Router.categoryMeals: (context) => CategoryMealsPage(
+              availableMeals: _availableMeals,
+            )
       },
     );
   }

@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../model/dummy_data.dart';
-import '../../router.dart';
 
 class MealDetailPage extends StatelessWidget {
-  final String mealId;
-
-  MealDetailPage({this.mealId});
+  String mealId;
+  final Function favoriteList;
+  final Function isFavorite;
+  MealDetailPage({this.favoriteList, this.isFavorite});
 
   Widget buildSectionTitle(BuildContext context, String text) {
     return Container(
@@ -35,7 +35,8 @@ class MealDetailPage extends StatelessWidget {
         child: child);
   }
 
-  PreferredSizeWidget _buildAppbar() {
+  PreferredSizeWidget _buildAppbar(BuildContext context) {
+    mealId = ModalRoute.of(context).settings.arguments as String;
     return AppBar(
       title: Text(
         '${DUMMY_MEALS.firstWhere((meal) => meal.id == mealId).title}',
@@ -46,9 +47,9 @@ class MealDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final appBar = _buildAppbar();
+    final appBar = _buildAppbar(context);
     return Scaffold(
-      appBar: _buildAppbar(),
+      appBar: _buildAppbar(context),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -114,8 +115,10 @@ class MealDetailPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Router.popPage(context, mealId),
-        child: Icon(Icons.delete),
+        onPressed: () => favoriteList(mealId),
+        child: Icon(
+          isFavorite(mealId) ? Icons.star : Icons.star_border,
+        ),
       ),
     );
   }

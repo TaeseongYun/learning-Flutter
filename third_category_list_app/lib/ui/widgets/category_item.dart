@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:third_category_list_app/router.dart';
-import 'package:third_category_list_app/ui/pages/category_meal_page.dart';
+import '../../route/router.dart';
 
 class CategoryItem extends StatelessWidget {
   final String id;
@@ -9,18 +8,20 @@ class CategoryItem extends StatelessWidget {
 
   CategoryItem({this.id, this.title, this.color});
 
+  void selectCategory(BuildContext ctx) {
+    Navigator.of(ctx).pushNamed(
+      Router.categoryMeals,
+      arguments: {
+        'id': id,
+        'title': title,
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Router.push(
-        context,
-        Router.categoryMeals,
-        {
-          'id': id,
-          'title': title,
-        },
-        null
-      ),
+      onTap: () => selectCategory(context),
       splashColor: Theme.of(context).primaryColor,
       borderRadius: BorderRadius.circular(15),
       child: Container(

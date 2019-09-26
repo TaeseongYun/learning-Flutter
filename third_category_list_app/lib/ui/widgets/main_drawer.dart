@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:third_category_list_app/router.dart';
+import '../../route/router.dart';
 
 class MainDrawer extends StatelessWidget {
   Widget buildListTitle(String title, IconData icon, Function tapHandler) {
@@ -20,6 +20,9 @@ class MainDrawer extends StatelessWidget {
     );
   }
 
+void selectedListTitle(BuildContext ctx, String routeString) {
+  Navigator.of(ctx).pushNamed(routeString);
+}
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -43,9 +46,9 @@ class MainDrawer extends StatelessWidget {
             height: 20,
           ),
           buildListTitle('Meals', Icons.restaurant,
-              () => Router.pushReplace(context, Router.categoryMain, null)),
+              () => selectedListTitle(context, Router.categoryMain)),
           buildListTitle('Settings', Icons.settings,
-              () => Router.pushReplace(context, Router.filtersPage, null)),
+              () => selectedListTitle(context, Router.filtersPage)),
         ],
       ),
     );
