@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:third_category_list_app/model/dummy_data.dart';
+import 'package:third_category_list_app/providers/category_providers.dart';
 import '../route/router.dart';
 import 'package:third_category_list_app/ui/pages/category_meal_page.dart';
 import 'package:third_category_list_app/ui/pages/filters_page.dart';
@@ -7,6 +9,7 @@ import 'package:third_category_list_app/ui/pages/meal_detail_page.dart';
 import 'package:third_category_list_app/ui/pages/tabs_page.dart';
 import '../ui/pages/filters_page.dart';
 import '../model/meal.dart';
+import '../providers/meals_providers.dart';
 
 class RootPage extends StatefulWidget {
   @override
@@ -66,42 +69,52 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'DeliMeals',
-      // home: TabsPage(),
-      theme: ThemeData(
-        primarySwatch: Colors.pink,
-        accentColor: Colors.amber,
-        canvasColor: Color.fromRGBO(255, 254, 229, 1),
-        fontFamily: 'Raleway',
-        textTheme: ThemeData.light().textTheme.copyWith(
-              body1: TextStyle(color: Color.fromRGBO(20, 51, 51, 1)),
-              body2: TextStyle(color: Color.fromRGBO(20, 51, 51, 1)),
-              title: TextStyle(
-                fontSize: 20,
-                fontFamily: 'RobotoCondensed',
-                fontWeight: FontWeight.bold,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          builder: (context) => CategoryProviders(),
+        ),
+        ChangeNotifierProvider(
+          builder: (context) => MealsProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'DeliMeals',
+        // home: TabsPage(),
+        theme: ThemeData(
+          primarySwatch: Colors.pink,
+          accentColor: Colors.amber,
+          canvasColor: Color.fromRGBO(255, 254, 229, 1),
+          fontFamily: 'Raleway',
+          textTheme: ThemeData.light().textTheme.copyWith(
+                body1: TextStyle(color: Color.fromRGBO(20, 51, 51, 1)),
+                body2: TextStyle(color: Color.fromRGBO(20, 51, 51, 1)),
+                title: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'RobotoCondensed',
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
+        ),
+        initialRoute: Router.categoryMain,
+        routes: {
+          //라우터 클래스를 만들었지만 home에서 url 인식을 하지 못해 추가해주었음.
+          Router.filtersPage: (context) => FilterPage(
+                currentFilter: _filters,
+                saveFilters: _setFilters,
+              ),
+          Router.categoryMain: (context) => TabsPage(
+                favoriteMeals: _favoriteMeals,
+              ),
+          Router.mealDetailPage: (context) => MealDetailPage(
+                favoriteList: _toggleFavorite,
+                isFavorite: _isMealFavorite,
+              ),
+          Router.categoryMeals: (context) => CategoryMealsPage(
+              // availableMeals: _availableMeals,
+              )
+        },
       ),
-      initialRoute: Router.categoryMain,
-      routes: {
-        //라우터 클래스를 만들었지만 home에서 url 인식을 하지 못해 추가해주었음.
-        Router.filtersPage: (context) => FilterPage(
-              currentFilter: _filters,
-              saveFilters: _setFilters,
-            ),
-        Router.categoryMain: (context) => TabsPage(
-              favoriteMeals: _favoriteMeals,
-            ),
-        Router.mealDetailPage: (context) => MealDetailPage(
-              favoriteList: _toggleFavorite,
-              isFavorite: _isMealFavorite,
-            ),
-        Router.categoryMeals: (context) => CategoryMealsPage(
-              availableMeals: _availableMeals,
-            )
-      },
     );
   }
 }

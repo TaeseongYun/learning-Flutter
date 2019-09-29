@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:forth_shop_app/ui/widgets/shop_item.dart';
-import '../../model/product.dart';
+import './product.dart';
 
-class ProductsOverViewPage extends StatelessWidget {
-  final List<Product> products = [
+class Products with ChangeNotifier {
+  List<Product> _items = [
     Product(
       id: 'p1',
       title: 'Red Shirt',
@@ -38,22 +36,25 @@ class ProductsOverViewPage extends StatelessWidget {
           'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
     ),
   ];
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      padding: const EdgeInsets.all(10),
-      itemBuilder: (context, index) => ShopItem(
-        id: products[index].id,
-        imageUrl: products[index].imageUrl,
-        itemTitle: products[index].title,
-      ),
-      itemCount: products.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 3 / 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
-    );
+
+  List<Product> get items => _items;
+
+  List<Product> get favoriteItems => _items.where((prodItem) => prodItem.isFavorite).toList();
+
+  // var _showFavoriteOnly = false;
+
+
+  // void showFavoritesOnly() {
+  //   _showFavoriteOnly = true;
+  //   notifyListeners();
+  // }
+
+  // void showAll() {
+  //   _showFavoriteOnly = false;
+  //   notifyListeners();
+  // }
+
+  Product findById(String id) {
+    return _items.firstWhere((prod) => prod.id == id);
   }
 }

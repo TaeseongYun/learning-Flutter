@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:third_category_list_app/model/dummy_data.dart';
+import 'package:third_category_list_app/providers/meals_providers.dart';
 import '../../ui/widgets/meal_item.dart';
-import '../../model/meal.dart';
 
 class CategoryMealsPage extends StatefulWidget {
-  final List<Meal> availableMeals;
+  // final List<Meal> availableMeals;
 
-  CategoryMealsPage({this.availableMeals});
+  // CategoryMealsPage({this.availableMeals});
 
   @override
   _CategoryMealsPageState createState() => _CategoryMealsPageState();
@@ -15,7 +16,7 @@ class CategoryMealsPage extends StatefulWidget {
 class _CategoryMealsPageState extends State<CategoryMealsPage> {
   String categoryTitle;
   String categoryId;
-  List<Meal> displayedMeals;
+  var displayedMeals;
   var _loadedInitData = false;
 
   @override
@@ -42,14 +43,9 @@ class _CategoryMealsPageState extends State<CategoryMealsPage> {
     super.didChangeDependencies();
   }
 
-  void _removedMeal(String mealId) {
-    setState(() {
-      displayedMeals.removeWhere((meal) => meal.id == mealId);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    displayedMeals = Provider.of<MealsProvider>(context);
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -58,14 +54,14 @@ class _CategoryMealsPageState extends State<CategoryMealsPage> {
         ),
         body: ListView.builder(
           itemBuilder: (context, index) => MealItem(
-            id: displayedMeals[index].id,
-            title: displayedMeals[index].title,
-            imageUrl: displayedMeals[index].imageUrl,
-            affordability: displayedMeals[index].affordability,
-            complexity: displayedMeals[index].complexity,
-            duration: displayedMeals[index].duration,
+            id: displayedMeals.listMeals[index].id,
+            title: displayedMeals.listMeals[index].title,
+            imageUrl: displayedMeals.listMeals[index].imageUrl,
+            affordability: displayedMeals.listMeals[index].affordability,
+            complexity: displayedMeals.listMeals[index].complexity,
+            duration: displayedMeals.listMeals[index].duration,
           ),
-          itemCount: displayedMeals.length,
+          itemCount: displayedMeals.listMeals.length,
         ));
   }
 }

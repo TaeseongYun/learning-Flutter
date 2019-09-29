@@ -8,7 +8,7 @@ class CategoryItem extends StatelessWidget {
 
   CategoryItem({this.id, this.title, this.color});
 
-  void selectCategory(BuildContext ctx) {
+  void _selectCategory(BuildContext ctx) {
     Navigator.of(ctx).pushNamed(
       Router.categoryMeals,
       arguments: {
@@ -21,7 +21,7 @@ class CategoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => selectCategory(context),
+      onTap: () => _selectCategory(context),
       splashColor: Theme.of(context).primaryColor,
       borderRadius: BorderRadius.circular(15),
       child: Container(
