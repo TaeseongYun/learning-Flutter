@@ -13,6 +13,7 @@ class ShopItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
+    print('what\'s product.id? => ${product.id}');
     final cart = Provider.of<Cart>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -37,14 +38,28 @@ class ShopItem extends StatelessWidget {
             ),
           ),
           trailing: IconButton(
-            icon: Icon(Icons.add_shopping_cart),
-            color: Theme.of(context).accentColor,
-            onPressed: () => cart.addItem(
-              product.id,
-              product.price,
-              product.title,
-            ),
-          ),
+              icon: Icon(Icons.add_shopping_cart),
+              color: Theme.of(context).accentColor,
+              onPressed: () {
+                cart.addItem(
+                  product.id,
+                  product.price,
+                  product.title,
+                );
+                Scaffold.of(context).hideCurrentSnackBar();
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                    'Added item to cart!',
+                  ),
+                  duration: Duration(seconds: 2),
+                  action: SnackBarAction(
+                    label: '취소',
+                    onPressed: () => cart.removeSingleItem(
+                      product.id,
+                    ),
+                  ),
+                ));
+              }),
           backgroundColor: Colors.black87,
           title: Text(
             product.title,

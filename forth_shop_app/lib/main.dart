@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:forth_shop_app/providers/orders.dart';
 import 'package:forth_shop_app/ui/pages/home.dart';
+import 'package:forth_shop_app/ui/pages/orders_page.dart';
 import 'package:forth_shop_app/ui/pages/product_cartlist_page.dart';
 import 'package:forth_shop_app/ui/pages/product_detail_page.dart';
 import './routers/route.dart';
@@ -21,6 +23,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: Cart(),
         ),
+        ChangeNotifierProvider.value(
+          value: Orders(),
+        )
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -33,7 +38,8 @@ class MyApp extends StatelessWidget {
         routes: {
           // Router.homePage: (context) => HomePage(),
           Router.detailItemPage: (context) => ProductDetailPage(),
-          Router.listCartPage: (context) => ProductCartListPage(),
+          Router.listCartPage: (context) => ProductCartListPageState(),
+          Router.ordersPage: (context) => OrdersPage(),
         },
       ),
     );

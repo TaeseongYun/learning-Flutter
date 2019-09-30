@@ -10,8 +10,8 @@ class MyShopDrawer extends StatelessWidget {
     );
   }
 
-  void _seletListTile(BuildContext context, String url) {
-    Navigator.of(context).pushNamed(url);
+  void _selectListTile(BuildContext context, String url) {
+    Navigator.of(context).pushReplacementNamed(url);
   }
 
   @override
@@ -19,23 +19,22 @@ class MyShopDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: <Widget>[
-          Container(
-            width: double.infinity,
-            height: 120,
-            alignment: Alignment.bottomCenter,
-            padding: EdgeInsets.symmetric(vertical: 30),
-            child: Text(
-              'MyShop',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-                fontSize: 30,
-                color: Theme.of(context).accentColor,
-              ),
-            ),
-            color: Theme.of(context).primaryColor,
+          AppBar(
+            title: Text('Hello Friend!'),
+            automaticallyImplyLeading: false,
           ),
-          _buildListTile('List Cart', Icons.add_shopping_cart,
-              () => _seletListTile(context, Router.listCartPage)),
+          Divider(),
+          _buildListTile(
+            'Shop',
+            Icons.shop,
+            () => _selectListTile(context, Router.homePage),
+          ),
+          Divider(),
+          _buildListTile(
+            'Order',
+            Icons.shopping_cart,
+            () => _selectListTile(context, Router.ordersPage),
+          ),
         ],
       ),
     );
