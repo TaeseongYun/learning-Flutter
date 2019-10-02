@@ -11,5 +11,6 @@ class Router {
   static const String dateFormat = 'yyyy/MM/dd   HH:mm';
 
   //firebase URL
-  static const String productUrl = 'https://fluttershopapp-29105.firebaseio.com/products.json';
+  static const String productUrl =
+      'https://fluttershopapp-29105.firebaseio.com/products.json';
 }

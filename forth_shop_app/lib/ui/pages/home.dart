@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../widgets/products_grid.dart';
 import 'package:forth_shop_app/ui/widgets/my_shop_drawer.dart';
 import '../../routers/route.dart';
+import '../../providers/product_provider.dart';
 
 enum FilterOptions {
   Favorites,
@@ -19,8 +20,33 @@ class HomePage extends StatefulWidget {
 void _selectedCartPage(BuildContext ctx) {
   Navigator.of(ctx).pushNamed(Router.listCartPage);
 }
+
+Future<void> _onRefreshComplete(BuildContext context) async {
+  await Provider.of<Products>(context).fetchAndSetProducts();
+}
+
 class _HomePageState extends State<HomePage> {
-  var isFavoriteItem = false;
+  var _isFavoriteItem = false;
+  var _initState = true;
+  var _isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    if (_initState) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      Provider.of<Products>(context).fetchAndSetProducts().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _initState = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,9 +78,9 @@ class _HomePageState extends State<HomePage> {
                       onSelected: (FilterOptions selectedValue) {
                         setState(() {
                           if (selectedValue == FilterOptions.Favorites) {
-                            isFavoriteItem = true;
+                            _isFavoriteItem = true;
                           } else {
-                            isFavoriteItem = false;
+                            _isFavoriteItem = false;
                           }
                         });
                       },
@@ -73,9 +99,14 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        body: ProductsGrid(
-          isFavorite: isFavoriteItem,
-        ),
+        body: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : RefreshIndicator(
+                onRefresh: () => _onRefreshComplete(context),
+                child: ProductsGrid(
+                  isFavorite: _isFavoriteItem,
+                ),
+              ),
         drawer: MyShopDrawer());
   }
 }

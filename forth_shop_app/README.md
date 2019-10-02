@@ -47,3 +47,14 @@
   }
 ## GlobalKey
 - 한 위젯에서 다른 위젯에 정보를 보내주거나 위젯의 상태를 유지해야 할때 사용하는 키.
+
+## Future?
+- Dart언어에서 Future는 다른언어(JS)의 Promise와 비슷하다 즉 비동기 처리를 하기 위한 클래스이다.
+예를들어 처음엔 상자가 닫혀있는 상태로 전송 그 후 다른 코드들이 쭉 먼저 실행되고 그 후 Future로 전송 된 코드가 완료가 되면 다른 코드들이 실행 된 후 Future가 호출된다.
+그리고 다른 한가지 예는 http 로  이미지 다운로드를 요청 하고 거기서 Future Object 를 던져준다 다른 코드를 쭉 실행하고 Future 오브젝트가 끝났다고 신호가오면 error를 보내서 처리한다.
+
+3가지 상태  1. 완료되지않은 Future object  2. 완료 된 두가지 상태(error, data)
+
+## 언제 async, await를 사용해
+- Future object를 받았는데 따로 두고 다른 작업 요청이 들어왔을때  그 작업보다 Future object 작업을 먼저 끝내놓고 다른 작업을 실행하고 싶다 할때에 async, await 사용 즉 async, await 를 사용 하여 Future object 작업을 처리를 하고 다른 작업을 하겠다.
+  함수에 async를 붙히면 그 함수는 자동적으로 Future를 리턴하게 된다. await이 붙혀진게 종료 될때까지 기다렸다가 값 출력하고 그 다음 문장 실행 한다.
