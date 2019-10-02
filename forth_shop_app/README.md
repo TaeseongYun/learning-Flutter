@@ -11,3 +11,39 @@
 
 ## notifyListener() vs listener
 - notifyListener는 UI가 변경 된게 있고 UI를 갱신하고 싶을 때 호출 하는 함수, listener는 위젯을 변경 어떤 이벤트가 왔을때 위젯을 변경하고 싶을 때 사용 하는 Provider.of(context) of의 프로퍼티 false로 주는 경우는 데이터를 딱 한번만 받고 싶을 때 설정
+
+## TextField안의 focus
+- build 함수 안에서 FocusNode 변수 만들어주고 2개의 텍스트 필드가 있을시 첫 텍스트 필드의 제출 버튼을 눌렀을 때 다음 텍스트 필드고 넘어가게 하려면 FocusScope.of(context) 가 필요하다
+
+- ex)
+  ``` Dart
+  void build(BuildContext context) {
+      return Column(children: <Widget>[
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Title',
+                ),
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_focusNode),
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: '가격',
+                ),
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
+                focusNode: _focusNode,
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: '설명',
+                ),
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
+                focusNode: _focusNode,
+              ),
+            ],
+      )
+  }
+## GlobalKey
+- 한 위젯에서 다른 위젯에 정보를 보내주거나 위젯의 상태를 유지해야 할때 사용하는 키.

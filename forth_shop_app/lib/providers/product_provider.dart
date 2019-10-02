@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:forth_shop_app/routers/route.dart';
+import 'package:http/http.dart' as http;
 import './product.dart';
 
 class Products with ChangeNotifier {
@@ -39,22 +43,47 @@ class Products with ChangeNotifier {
 
   List<Product> get items => _items;
 
-  List<Product> get favoriteItems => _items.where((prodItem) => prodItem.isFavorite).toList();
+  List<Product> get favoriteItems =>
+      _items.where((prodItem) => prodItem.isFavorite).toList();
 
-  // var _showFavoriteOnly = false;
-
-
-  // void showFavoritesOnly() {
-  //   _showFavoriteOnly = true;
-  //   notifyListeners();
-  // }
-
-  // void showAll() {
-  //   _showFavoriteOnly = false;
-  //   notifyListeners();
-  // }
+  Future<void> addProduct(Product product) {
+    return http
+        .post(
+      Router.productUrl,
+      body: json.encode({
+        'title': product.title,
+        'description': product.description,
+        'price': product.price,
+        'isFravorite': product.isFavorite,
+        'imageUrl': product.imageUrl
+      }),
+    )
+        .then((res) {
+      print(json.decode(res.body));
+      final newProduct = Product(
+        title: product.title,
+        description: product.description,
+        id: json.decode(res.body)['name'],
+        imageUrl: product.imageUrl,
+        price: product.price,
+      );
+      _items.add(newProduct);
+      notifyListeners();
+    });
+  }
 
   Product findById(String id) {
     return _items.firstWhere((prod) => prod.id == id);
+  }
+
+  void removedProduct(String id) {
+    _items.removeWhere((prod) => prod.id == id);
+    notifyListeners();
+  }
+
+  void updateProduct(String id, Product newProduct) {
+    final prodIndex = _items.indexWhere((prod) => prod.id == id);
+    _items[prodIndex] = newProduct;
+    notifyListeners();
   }
 }

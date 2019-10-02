@@ -35,6 +35,12 @@ class MyShopDrawer extends StatelessWidget {
             Icons.shopping_cart,
             () => _selectListTile(context, Router.ordersPage),
           ),
+          Divider(),
+          _buildListTile(
+            'Manage Products',
+            Icons.edit,
+            () => _selectListTile(context, Router.userProductPage),
+          ),
         ],
       ),
     );

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:forth_shop_app/providers/orders.dart';
+import 'package:forth_shop_app/ui/pages/edit_products_page.dart';
 import 'package:forth_shop_app/ui/pages/home.dart';
 import 'package:forth_shop_app/ui/pages/orders_page.dart';
 import 'package:forth_shop_app/ui/pages/product_cartlist_page.dart';
 import 'package:forth_shop_app/ui/pages/product_detail_page.dart';
+import 'package:forth_shop_app/ui/pages/user_products_page.dart';
 import './routers/route.dart';
 import './providers/product_provider.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +42,8 @@ class MyApp extends StatelessWidget {
           Router.detailItemPage: (context) => ProductDetailPage(),
           Router.listCartPage: (context) => ProductCartListPageState(),
           Router.ordersPage: (context) => OrdersPage(),
+          Router.userProductPage: (context) => UserProductsPage(),
+          Router.editProductsPage: (context) => EditProductsPage(),
         },
       ),
     );
