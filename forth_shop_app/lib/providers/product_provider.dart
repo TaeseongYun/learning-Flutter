@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:forth_shop_app/model/http_exception.dart';
 import 'package:forth_shop_app/routers/route.dart';
 import 'package:http/http.dart' as http;
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import './product.dart';
 
 class Products with ChangeNotifier {
@@ -16,21 +16,23 @@ class Products with ChangeNotifier {
 
   Future<void> fetchAndSetProducts() async {
     try {
-      final response = await http.get(Router.productUrl);
+      final response = await http.get(Router.baseUrl + 'products.json');
 
-      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
+
+      // print(extractedData);
       final List<Product> loadedProdcuts = [];
+      if (extractedData == null) {
+        return;
+      }
       extractedData.forEach(
-        (prodId, prodData) => loadedProdcuts.add(
-          Product(
-            id: prodId,
+        (prodId, prodData) => loadedProdcuts.add(Product(
+            isFavorite: prodData['isFavorite'],
             title: prodData['title'],
-            description: prodData['description'],
             price: prodData['price'],
-            isFavorite: prodData['isFravorite'],
             imageUrl: prodData['imageUrl'],
-          ),
-        ),
+            id: prodId,
+            description: prodData['description'])),
       );
       _items = loadedProdcuts;
       notifyListeners();
@@ -43,13 +45,13 @@ class Products with ChangeNotifier {
   Future<void> addProduct(Product product) async {
     try {
       final response = await http.post(
-        Router.productUrl,
+        Router.baseUrl + 'products.json',
         body: json.encode(
           {
             'title': product.title,
             'description': product.description,
             'price': product.price,
-            'isFravorite': product.isFavorite,
+            'isFavorite': product.isFavorite,
             'imageUrl': product.imageUrl
           },
         ),
@@ -75,24 +77,37 @@ class Products with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  void removedProduct(String id) {
-    _items.removeWhere((prod) => prod.id == id);
-    notifyListeners();
-  }
-
-  void updateProduct(String id, Product newProduct) {
+  Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
-    _items[prodIndex] = newProduct;
+    if (prodIndex >= 0) {
+      await http.patch(Router.baseUrl + 'products/$id.json',
+          body: json.encode({
+            'title': newProduct.title,
+            'description': newProduct.description,
+            'price': newProduct.price,
+            'imageUrl': newProduct.imageUrl
+          }));
+      _items[prodIndex] = newProduct;
+      notifyListeners();
+    } else {
+      print('...');
+    }
+  }
+
+  Future<void> deleteProduct(String productID) async {
+    final existingProductIndex =
+        _items.indexWhere((prod) => prod.id == productID);
+    var existingProduct = _items[existingProductIndex];
+    _items.removeAt(existingProductIndex);
     notifyListeners();
-  }
+    final response =
+        await http.delete(Router.baseUrl + '/products/$productID.json');
+    if (response.statusCode >= 400) {
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+      throw HttpException(errorString: 'Could not delete product.');
+    }
 
-  void onRefresh(RefreshController refreshController) async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    refreshController.refreshCompleted();
-  }
-
-  void onLoading(RefreshController refreshController) async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    refreshController.refreshCompleted();
+    existingProduct = null;
   }
 }

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:forth_shop_app/http/login_api_service.dart';
+import 'package:forth_shop_app/providers/login_provider.dart';
 import 'package:forth_shop_app/providers/orders.dart';
 import 'package:forth_shop_app/ui/pages/edit_products_page.dart';
 import 'package:forth_shop_app/ui/pages/home.dart';
 import 'package:forth_shop_app/ui/pages/orders_page.dart';
 import 'package:forth_shop_app/ui/pages/product_cartlist_page.dart';
 import 'package:forth_shop_app/ui/pages/product_detail_page.dart';
+import 'package:forth_shop_app/ui/pages/user_login_page.dart';
 import 'package:forth_shop_app/ui/pages/user_products_page.dart';
 import './routers/route.dart';
 import './providers/product_provider.dart';
@@ -20,6 +23,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
+          value: LoginProvider(),
+        ),
+        ChangeNotifierProvider.value(
           value: Products(),
         ),
         ChangeNotifierProvider.value(
@@ -27,6 +33,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: Orders(),
+        ),
+        ChangeNotifierProvider.value(
+          value: LoginProvider(),
         )
       ],
       child: MaterialApp(
@@ -35,8 +44,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.purple,
             accentColor: Colors.deepOrange,
             fontFamily: 'Lato'),
-        initialRoute: Router.homePage,
-        home: HomePage(),
+        home: UserLogin(),
         routes: {
           // Router.homePage: (context) => HomePage(),
           Router.detailItemPage: (context) => ProductDetailPage(),

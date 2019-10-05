@@ -14,6 +14,40 @@
 
 ## TextField안의 focus
 - build 함수 안에서 FocusNode 변수 만들어주고 2개의 텍스트 필드가 있을시 첫 텍스트 필드의 제출 버튼을 눌렀을 때 다음 텍스트 필드고 넘어가게 하려면 FocusScope.of(context) 가 필요하다
+-  ex)
+  ``` Dart
+  Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.account_circle),
+                      labelText: 'Email',
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please Enter correct Email';
+                      }
+                      return null;
+                    },
+                    onFieldSubmitted: (_) =>
+                        FocusScope.of(context).requestFocus(_passwordFocus),
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.visiblePassword,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.vpn_key),
+                      labelText: 'Password',
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please Enter correct Password';
+                      }
+                      return null;
+                    },
+                    focusNode: _passwordFocus,
+                  ),
+   ```
 
 - ex)
   ``` Dart
@@ -55,6 +89,37 @@
 
 3가지 상태  1. 완료되지않은 Future object  2. 완료 된 두가지 상태(error, data)
 
-## 언제 async, await를 사용해
+## 언제 async, await를 사용해?
 - Future object를 받았는데 따로 두고 다른 작업 요청이 들어왔을때  그 작업보다 Future object 작업을 먼저 끝내놓고 다른 작업을 실행하고 싶다 할때에 async, await 사용 즉 async, await 를 사용 하여 Future object 작업을 처리를 하고 다른 작업을 하겠다.
   함수에 async를 붙히면 그 함수는 자동적으로 Future를 리턴하게 된다. await이 붙혀진게 종료 될때까지 기다렸다가 값 출력하고 그 다음 문장 실행 한다.
+
+
+## TextFormField
+- 만약 TextFormField에 패스워드를 사용하고 싶으면 TextFormField 속성 중 obscureText: true, 값을 추가 해 준다.
+
+## Custome Painter??
+
+- 원래 보통 동그라미나 네모가 아닌 특이한 모양을 context위에 그려주는 경우에 Custom Painter를 사용한다.
+
+- function shouldRepaint  ?  =>  커스텀 페인터를 다시 그리냐 마냐를 설정하는 function 즉 새롬게 그려야할게 있으면 return 을 특정값으로 그게 아니라면 false
+
+- function paint? =>  여기서 커스텀페인트에 띄울 그림을 그려주는것이다.
+
+## Dart에서 사용되는 ".."
+
+- 다른 언어를 접한 나에겐 조금 생소한 표현이 하나 있었다.
+  
+  ex)
+   ```Dart
+  final paint = Paint()..color = Colors.blue;
+  ```
+  어떻게 저렇게 되는건가 싶어서 유튜브를 참고해보니 Paint()..color = Colors.blue;를 한 구문이라고 보면 된다고 하였다.
+
+  그나마 익숙한 Kotlin 언어에서 비슷한 예를 들자면 이것과 비슷한거다.
+  
+  ex)
+  ``` Kotlin
+  val paint = Paint().apply {
+    color = Colors.blue;
+  } 
+  ```
