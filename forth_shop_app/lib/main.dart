@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:forth_shop_app/http/login_api_service.dart';
 import 'package:forth_shop_app/providers/login_provider.dart';
 import 'package:forth_shop_app/providers/orders.dart';
 import 'package:forth_shop_app/ui/pages/edit_products_page.dart';
@@ -26,33 +25,35 @@ class MyApp extends StatelessWidget {
           value: LoginProvider(),
         ),
         ChangeNotifierProvider.value(
-          value: Products(),
-        ),
-        ChangeNotifierProvider.value(
           value: Cart(),
+        ),
+        ChangeNotifierProxyProvider<LoginProvider, Products>(
+          builder: (_, auth, previousProducts) => Products(
+            previousProducts == null ? [] : previousProducts.items,
+            auth.token,
+          ),
         ),
         ChangeNotifierProvider.value(
           value: Orders(),
-        ),
-        ChangeNotifierProvider.value(
-          value: LoginProvider(),
         )
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-            primarySwatch: Colors.purple,
-            accentColor: Colors.deepOrange,
-            fontFamily: 'Lato'),
-        home: UserLogin(),
-        routes: {
-          // Router.homePage: (context) => HomePage(),
-          Router.detailItemPage: (context) => ProductDetailPage(),
-          Router.listCartPage: (context) => ProductCartListPageState(),
-          Router.ordersPage: (context) => OrdersPage(),
-          Router.userProductPage: (context) => UserProductsPage(),
-          Router.editProductsPage: (context) => EditProductsPage(),
-        },
+      child: Consumer<LoginProvider>(
+        builder: (context, authData, _) => MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+              primarySwatch: Colors.purple,
+              accentColor: Colors.deepOrange,
+              fontFamily: 'Lato'),
+          home: authData.isAuth ? HomePage() : UserLogin(),
+          routes: {
+            // Router.homePage: (context) => HomePage(),
+            Router.detailItemPage: (context) => ProductDetailPage(),
+            Router.listCartPage: (context) => ProductCartListPageState(),
+            Router.ordersPage: (context) => OrdersPage(),
+            Router.userProductPage: (context) => UserProductsPage(),
+            Router.editProductsPage: (context) => EditProductsPage(),
+          },
+        ),
       ),
     );
   }

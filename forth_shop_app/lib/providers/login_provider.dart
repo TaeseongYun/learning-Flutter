@@ -3,27 +3,43 @@ import 'dart:convert';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:forth_shop_app/routers/route.dart';
 import 'package:http/http.dart' as http;
-import '../routers/route.dart';
 
-class LoginProvider extends ChangeNotifier {
+import '../http/api_key.dart';
+import '../model/http_exception.dart';
+
+class LoginProvider with ChangeNotifier {
   String _token;
-  DateTime _expriyDate;
+  DateTime _expiryDate;
   String _userId;
 
-  bool _isJoin = false;
-  bool get isJoin => _isJoin;
-
-  void toggle() {
-    _isJoin = !_isJoin;
-    notifyListeners();
+  bool get isAuth {
+    return token != null;
   }
 
-  Future<void> signUp(
-      String email, String password, BuildContext context) async {
+  String get token {
+    if (_expiryDate != null &&
+        _expiryDate.isAfter(DateTime.now()) &&
+        _token != null) {
+      print('이프믄 둘어왔어용');
+
+      print('이프문 안에서의 _token 값 => $_token');
+      return _token;
+    }
+    return null;
+  }
+
+  Future<void> _authenticate(
+    String email,
+    String password,
+    String urlSegment,
+  ) async {
+    final url = Router.firebaseAuthBaseUrl +
+        '/accounts:$urlSegment?key=${APIKEY.API_KEY}';
     try {
       final response = await http.post(
-        Router.signUpUrl,
+        url,
         body: json.encode(
           {
             'email': email,
@@ -32,22 +48,36 @@ class LoginProvider extends ChangeNotifier {
           },
         ),
       );
-      if (response.statusCode >= 400) {
-        Flushbar(
-          duration: Duration(seconds: 2),
-          icon: Icon(
-            Icons.info,
-            color: Theme.of(context).primaryTextTheme.title.color,
-          ),
-          title: '존재하는 아이디 입니다.',
-          message: '다른 아이디를 이용해주세요',
-          leftBarIndicatorColor: Theme.of(context).errorColor,
-        ).show(context);
-        print('object');
-      }
+
       print(jsonDecode(response.body));
+
+      final responseData = json.decode(response.body);
+      // print(responseData);
+      if (responseData['error'] != null) {
+        throw HttpException(errorString: responseData['error']['message']);
+      }
+      _token = responseData['idToken'];
+      _userId = responseData['localId'];
+      _expiryDate = DateTime.now().add(
+        Duration(
+          seconds: int.parse(
+            responseData['expiresIn'],
+          ),
+        ),
+      );
+
+      // print('token value => $token');
+      notifyListeners();
     } catch (error) {
-      print(error.toString());
+      throw error;
     }
+  }
+
+  Future<void> signup(String email, String password) async {
+    return _authenticate(email, password, 'signUp');
+  }
+
+  Future<void> login(String email, String password) async {
+    return _authenticate(email, password, 'signInWithPassword');
   }
 }

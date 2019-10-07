@@ -123,3 +123,7 @@
     color = Colors.blue;
   } 
   ```
+
+## on catch??
+
+- 다트 언어에서 on 키워드는 catch 앞에 붙는 키워드인데 on 다음에 오는 특정클래스가 감지 되면 catch 하는 그런 형태이다.  

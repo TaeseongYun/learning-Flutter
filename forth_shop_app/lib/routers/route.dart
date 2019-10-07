@@ -19,6 +19,9 @@ class Router {
   static const String ordersUrl =
       'https://fluttershopapp-29105.firebaseio.com/order.json';
 
-  static const String signUpUrl =
-      'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${APIKEY.API_KEY}';
+  static const String firebaseAuthBaseUrl =
+      'https://identitytoolkit.googleapis.com/v1';
+
+  static const String signInUrl =
+      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${APIKEY.API_KEY}';
 }

@@ -14,26 +14,35 @@ class Products with ChangeNotifier {
   List<Product> get favoriteItems =>
       _items.where((prodItem) => prodItem.isFavorite).toList();
 
+  final String authToken;
+
+  Products(this._items, this.authToken);
+
   Future<void> fetchAndSetProducts() async {
+    print(authToken);
+    print('authToken => $authToken');
+    final response =
+        await http.get(Router.baseUrl + 'products.json?auth=$authToken');
+
     try {
-      final response = await http.get(Router.baseUrl + 'products.json');
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
 
-      final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
-
-      // print(extractedData);
-      final List<Product> loadedProdcuts = [];
       if (extractedData == null) {
         return;
       }
-      extractedData.forEach(
-        (prodId, prodData) => loadedProdcuts.add(Product(
-            isFavorite: prodData['isFavorite'],
-            title: prodData['title'],
-            price: prodData['price'],
-            imageUrl: prodData['imageUrl'],
-            id: prodId,
-            description: prodData['description'])),
-      );
+      // print(extractedData);
+      final List<Product> loadedProdcuts = [];
+
+      extractedData.forEach((prodId, prodData) {
+        loadedProdcuts.add(Product(
+          id: prodId,
+          title: prodData['title'],
+          description: prodData['description'],
+          price: prodData['price'],
+          isFavorite: prodData['isFavorite'],
+          imageUrl: prodData['imageUrl'],
+        ));
+      });
       _items = loadedProdcuts;
       notifyListeners();
     } catch (error) {
