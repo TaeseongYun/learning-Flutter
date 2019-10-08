@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:forth_shop_app/providers/login_provider.dart';
+import 'package:provider/provider.dart';
 import '../../routers/route.dart';
 
 class MyShopDrawer extends StatelessWidget {
@@ -41,6 +43,12 @@ class MyShopDrawer extends StatelessWidget {
             Icons.edit,
             () => _selectListTile(context, Router.userProductPage),
           ),
+          Divider(),
+          _buildListTile('Log-Out', Icons.exit_to_app, () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacementNamed('/');
+            Provider.of<LoginProvider>(context).logout();
+          })
         ],
       ),
     );

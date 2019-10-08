@@ -22,11 +22,16 @@ class OrderItem {
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
 
+  final String authToken;
+  final String userId;
   List<OrderItem> get orders => _orders;
+
+  Orders(this._orders, {this.authToken, this.userId});
 
   Future<void> fetchOrders() async {
     try {
-      final response = await http.get(Router.baseUrl + 'orders.json');
+      final response = await http
+          .get(Router.baseUrl + 'orders/$userId.json?auth=$authToken');
       final getOrdersData = json.decode(response.body) as Map<String, dynamic>;
 
       final List<OrderItem> loadedOrdersItems = [];
@@ -65,7 +70,7 @@ class Orders with ChangeNotifier {
     try {
       final timeStamp = DateTime.now();
       final response = await http.post(
-        Router.baseUrl + 'orders.json',
+        Router.baseUrl + 'orders/$userId.json?auth=$authToken',
         body: json.encode({
           'amount': total,
           'dateTime': timeStamp.toIso8601String(),

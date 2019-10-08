@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:forth_shop_app/routers/route.dart';
 import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 
@@ -27,16 +28,18 @@ class Product with ChangeNotifier {
     // notifyListeners();
   }
 
-  Future<void> doIsFavorite() async {
+  Future<void> doIsFavorite(String token, String userId) async {
     final oldState = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
-    final url = 'https://fluttershopapp-29105.firebaseio.com/products/$id.json';
+    final url = Router.baseUrl + 'userFavorite/$userId/$id.json?auth=$token';
     try {
-      final response = await http.patch(url,
-          body: json.encode({
-            'isFavorite': isFavorite,
-          }));
+      final response = await http.put(
+        url,
+        body: json.encode(
+          isFavorite,
+        ),
+      );
 
       if (response.statusCode >= 400) {
         _setFavValue(oldState);

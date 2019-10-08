@@ -12,6 +12,7 @@ import './routers/route.dart';
 import './providers/product_provider.dart';
 import 'package:provider/provider.dart';
 import './providers/cart.dart';
+import './ui/pages/splash_screnn.dart';
 
 void main() => runApp(MyApp());
 
@@ -31,10 +32,15 @@ class MyApp extends StatelessWidget {
           builder: (_, auth, previousProducts) => Products(
             previousProducts == null ? [] : previousProducts.items,
             auth.token,
+            auth.userId,
           ),
         ),
-        ChangeNotifierProvider.value(
-          value: Orders(),
+        ChangeNotifierProxyProvider<LoginProvider, Orders>(
+          builder: (_, auth, previousProducts) => Orders(
+            previousProducts == null ? [] : previousProducts.orders,
+            authToken: auth.token,
+            userId: auth.userId,
+          ),
         )
       ],
       child: Consumer<LoginProvider>(
@@ -44,7 +50,15 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.purple,
               accentColor: Colors.deepOrange,
               fontFamily: 'Lato'),
-          home: authData.isAuth ? HomePage() : UserLogin(),
+          home: authData.isAuth
+              ? HomePage()
+              : FutureBuilder(
+                  future: authData.tryAutoLogin(),
+                  builder: (context, snapshot) =>
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? SplashPages()
+                          : UserLogin(),
+                ),
           routes: {
             // Router.homePage: (context) => HomePage(),
             Router.detailItemPage: (context) => ProductDetailPage(),

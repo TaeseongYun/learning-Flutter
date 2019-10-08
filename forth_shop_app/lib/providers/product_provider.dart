@@ -15,14 +15,15 @@ class Products with ChangeNotifier {
       _items.where((prodItem) => prodItem.isFavorite).toList();
 
   final String authToken;
+  final String userId;
 
-  Products(this._items, this.authToken);
+  Products(this._items, this.authToken, this.userId);
 
-  Future<void> fetchAndSetProducts() async {
-    print(authToken);
-    print('authToken => $authToken');
-    final response =
-        await http.get(Router.baseUrl + 'products.json?auth=$authToken');
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    final filterString =
+        filterByUser ? 'orderBy="createId"&equalTo="$userId"' : '';
+    final response = await http
+        .get(Router.baseUrl + 'products.json?auth=$authToken&$filterByUser');
 
     try {
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -30,7 +31,12 @@ class Products with ChangeNotifier {
       if (extractedData == null) {
         return;
       }
-      // print(extractedData);
+
+      final favoriteReponse = await http
+          .get(Router.baseUrl + 'userFavorite/$userId.json?auth=$authToken');
+
+      final favoriteData = jsonDecode(favoriteReponse.body);
+
       final List<Product> loadedProdcuts = [];
 
       extractedData.forEach((prodId, prodData) {
@@ -39,8 +45,9 @@ class Products with ChangeNotifier {
           title: prodData['title'],
           description: prodData['description'],
           price: prodData['price'],
-          isFavorite: prodData['isFavorite'],
           imageUrl: prodData['imageUrl'],
+          isFavorite:
+              favoriteData == null ? false : favoriteData[prodId] ?? false,
         ));
       });
       _items = loadedProdcuts;
@@ -54,14 +61,14 @@ class Products with ChangeNotifier {
   Future<void> addProduct(Product product) async {
     try {
       final response = await http.post(
-        Router.baseUrl + 'products.json',
+        Router.baseUrl + 'products.json?auth=$authToken',
         body: json.encode(
           {
             'title': product.title,
             'description': product.description,
             'price': product.price,
-            'isFavorite': product.isFavorite,
-            'imageUrl': product.imageUrl
+            'imageUrl': product.imageUrl,
+            'createId': userId,
           },
         ),
       );
@@ -89,7 +96,7 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
-      await http.patch(Router.baseUrl + 'products/$id.json',
+      await http.patch(Router.baseUrl + 'products/$id.json?auth=$authToken',
           body: json.encode({
             'title': newProduct.title,
             'description': newProduct.description,
@@ -109,8 +116,8 @@ class Products with ChangeNotifier {
     var existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);
     notifyListeners();
-    final response =
-        await http.delete(Router.baseUrl + '/products/$productID.json');
+    final response = await http
+        .delete(Router.baseUrl + '/products/$productID.json?auth=$authToken');
     if (response.statusCode >= 400) {
       _items.insert(existingProductIndex, existingProduct);
       notifyListeners();

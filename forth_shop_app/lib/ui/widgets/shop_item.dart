@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forth_shop_app/providers/login_provider.dart';
 import 'package:provider/provider.dart';
 import '../../routers/route.dart';
 import '../../providers/product.dart';
@@ -13,6 +14,8 @@ class ShopItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
+    final authData = Provider.of<LoginProvider>(context, listen: false);
+
     print('what\'s product.id? => ${product.id}');
     final cart = Provider.of<Cart>(context, listen: false);
     return ClipRRect(
@@ -34,7 +37,8 @@ class ShopItem extends StatelessWidget {
               icon: Icon(
                   product.isFavorite ? Icons.favorite : Icons.favorite_border),
               color: Theme.of(context).accentColor,
-              onPressed: () => product.doIsFavorite(),
+              onPressed: () =>
+                  product.doIsFavorite(authData.token, authData.userId),
             ),
           ),
           trailing: IconButton(
